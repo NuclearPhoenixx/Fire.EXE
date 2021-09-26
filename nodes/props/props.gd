@@ -2,7 +2,7 @@ extends TileMap
 
 
 export(String) var tile_name := "Props" # Atlas Tile name used for generation
-export(int) var clear_chance := 0.25 # The percentage of empty tiles
+export(float) var clear_chance := 0.25 # The percentage of empty tiles
 
 
 func _ready():

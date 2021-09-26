@@ -9,16 +9,16 @@ func _ready():
 	$SpreadTimer.start()
 
 
-func _on_Lifetime_timeout() -> void:
+func _on_Lifetime_timeout():
 	queue_free()
 
 
-func _on_SpreadTimer_timeout() -> void:
+func _on_SpreadTimer_timeout():
 	Main.emit_signal("fire_spread", position)
 	$BurntTimer.start()
 
 
-func _on_BurntTimer_timeout() -> void:
+func _on_BurntTimer_timeout():
 	Main.emit_signal("burnt", position)
 	emitting = false
 	$Lifetime.start()

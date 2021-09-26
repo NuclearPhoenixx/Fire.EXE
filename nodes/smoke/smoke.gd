@@ -6,9 +6,9 @@ func _ready():
 	$Lifetime.start()
 
 
-func _on_Lifetime_timeout() -> void:
+func _on_Lifetime_timeout():
 	$KillTimer.start()
 
 
-func _on_KillTimer_timeout() -> void:
+func _on_KillTimer_timeout():
 	queue_free()
