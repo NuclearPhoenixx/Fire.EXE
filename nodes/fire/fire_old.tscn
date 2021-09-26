@@ -1,0 +1,73 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://nodes/fire/fire.gd" type="Script" id=1]
+
+[sub_resource type="Gradient" id=1]
+colors = PoolColorArray( 0.992157, 1, 0, 1, 0.905882, 0.0117647, 0.0117647, 1 )
+
+[sub_resource type="GradientTexture" id=2]
+gradient = SubResource( 1 )
+
+[sub_resource type="Curve" id=3]
+_data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 0.759091 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=4]
+curve = SubResource( 3 )
+
+[sub_resource type="ParticlesMaterial" id=5]
+lifetime_randomness = 0.5
+emission_shape = 1
+emission_sphere_radius = 8.0
+flag_disable_z = true
+gravity = Vector3( 0, -91, 0 )
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+scale = 2.0
+scale_curve = SubResource( 4 )
+color_ramp = SubResource( 2 )
+hue_variation = 0.09
+hue_variation_random = 0.28
+
+[sub_resource type="Curve" id=6]
+_data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 0.745455 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="Gradient" id=7]
+colors = PoolColorArray( 1, 0.984314, 0, 1, 0.823529, 0, 0, 1 )
+
+[node name="Fire" type="Particles2D"]
+amount = 64
+lifetime = 1.5
+randomness = 1.0
+process_material = SubResource( 5 )
+script = ExtResource( 1 )
+
+[node name="Fire" type="CPUParticles2D" parent="."]
+visible = false
+emitting = false
+amount = 64
+lifetime = 1.5
+randomness = 1.0
+lifetime_randomness = 0.5
+local_coords = false
+emission_shape = 1
+emission_sphere_radius = 8.0
+gravity = Vector2( 0, -91 )
+scale_amount = 2.0
+scale_amount_curve = SubResource( 6 )
+color_ramp = SubResource( 7 )
+
+[node name="Light2D" type="Light2D" parent="."]
+enabled = false
+
+[node name="Lifetime" type="Timer" parent="."]
+one_shot = true
+
+[node name="SpreadTimer" type="Timer" parent="."]
+one_shot = true
+
+[node name="BurntTimer" type="Timer" parent="."]
+one_shot = true
+
+[connection signal="timeout" from="Lifetime" to="Fire" method="_on_Lifetime_timeout"]
+[connection signal="timeout" from="SpreadTimer" to="Fire" method="_on_SpreadTimer_timeout"]
+[connection signal="timeout" from="BurntTimer" to="Fire" method="_on_BurntTimer_timeout"]
