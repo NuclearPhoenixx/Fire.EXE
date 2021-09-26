@@ -1,10 +1,9 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://tilemap/ground_tilemap.tres" type="TileSet" id=1]
 [ext_resource path="res://tilemap/props_tilemap.tres" type="TileSet" id=2]
 [ext_resource path="res://nodes/ground/ground.gd" type="Script" id=3]
 [ext_resource path="res://nodes/props/props.gd" type="Script" id=4]
-[ext_resource path="res://nodes/fire/fire.tscn" type="PackedScene" id=5]
 
 [node name="Main2D" type="Node2D"]
 
@@ -49,5 +48,9 @@ current = true
 visible = false
 color = Color( 1, 1, 1, 0.345098 )
 
-[node name="Fire" parent="." instance=ExtResource( 5 )]
-position = Vector2( 480, 272 )
+[node name="StartTimer" type="Timer" parent="."]
+wait_time = 5.0
+one_shot = true
+autostart = true
+
+[connection signal="timeout" from="StartTimer" to="Ground" method="_on_StartTimer_timeout"]

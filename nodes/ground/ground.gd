@@ -3,10 +3,11 @@ extends TileMap
 
 const FireNode := preload("res://nodes/fire/fire.tscn")
 const SmokeNode := preload("res://nodes/smoke/smoke.tscn")
-var on_fire_tiles := [] #PoolVector2Array()
 
 export(String) var tile_name := "Ground Tiles" # Atlas Tile name used for generation
 export(int) var max_tries := 4
+
+var on_fire_tiles := [] #PoolVector2Array()
 
 
 func _ready():
@@ -68,3 +69,10 @@ func generate_ground(var viewport_rect : Vector2 = Vector2.ZERO) -> void:
 		for y in range(map_start.y,map_end.y):
 			var random_tile : Vector2 = Vector2(Main.rng.randi_range(0,int(tile_number.x)),Main.rng.randi_range(0,int(tile_number.y)))
 			set_cell(x,y,tile_id,false,false,false,random_tile)
+
+
+# Start the fire on a random tile when the timer runs out
+func _on_StartTimer_timeout():
+	var NewNode = FireNode.instance()
+	get_parent().add_child(NewNode)
+	NewNode.position = to_global(map_to_world(get_used_cells()[Main.rng.randi_range(0,get_used_cells().size()-1)]))
