@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://tilemap/ground_tilemap.tres" type="TileSet" id=1]
 [ext_resource path="res://tilemap/props_tilemap.tres" type="TileSet" id=2]
 [ext_resource path="res://nodes/ground/ground.gd" type="Script" id=3]
 [ext_resource path="res://nodes/props/props.gd" type="Script" id=4]
+[ext_resource path="res://nodes/screeneffects/screeneffects.gd" type="Script" id=5]
 
 [node name="Main2D" type="Node2D"]
 
@@ -44,9 +45,8 @@ script = ExtResource( 4 )
 position = Vector2( 512, 304 )
 current = true
 
-[node name="CanvasModulate" type="CanvasModulate" parent="."]
-visible = false
-color = Color( 1, 1, 1, 0.345098 )
+[node name="ScreenEffects" type="CanvasModulate" parent="."]
+script = ExtResource( 5 )
 
 [node name="StartTimer" type="Timer" parent="."]
 one_shot = true

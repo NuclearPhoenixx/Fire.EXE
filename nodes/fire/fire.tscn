@@ -28,7 +28,9 @@ color_ramp = SubResource( 2 )
 hue_variation = 0.09
 hue_variation_random = 0.28
 
-[node name="Fire" type="Particles2D"]
+[node name="Fire" type="Particles2D" groups=[
+"fire",
+]]
 amount = 64
 lifetime = 1.5
 randomness = 1.0

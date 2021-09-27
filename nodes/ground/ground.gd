@@ -26,7 +26,7 @@ func burnt(pos : Vector2) -> void:
 	
 	var random_tile : Vector2 = Vector2(Main.rng.randi_range(0,int(burnt_tiles.x)),Main.rng.randi_range(0,int(burnt_tiles.y)))
 	
-	set_cell(pos.x,pos.y,burnt_id,false,false,false,random_tile)
+	set_cell(int(pos.x),int(pos.y),burnt_id,false,false,false,random_tile)
 	on_fire_tiles.erase(world_to_map(pos))
 	
 	#var NewNode = SmokeNode.instance() # Spawn Smoke
