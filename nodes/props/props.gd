@@ -7,8 +7,12 @@ export(float) var clear_chance := 0.25 # The percentage of empty tiles
 
 func _ready():
 	Main.connect("burnt",self,"burnt")
-	var viewport_size := get_viewport().get_visible_rect().size
-	generate_ground(viewport_size)
+	
+	if Main.viewport_override == Vector2.ZERO:
+		var viewport_size := get_viewport().get_visible_rect().size
+		generate_ground(viewport_size)
+	else:
+		generate_ground(Main.viewport_override)
 
 
 func burnt(pos : Vector2) -> void:

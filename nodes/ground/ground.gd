@@ -17,8 +17,12 @@ var on_fire_tiles := [] #PoolVector2Array()
 func _ready():
 	Main.connect("burnt",self,"burnt")
 	Main.connect("fire_spread",self,"fire_spread")
-	var viewport_size := get_viewport().get_visible_rect().size
-	generate_ground(viewport_size)
+	
+	if Main.viewport_override == Vector2.ZERO:
+		var viewport_size := get_viewport().get_visible_rect().size
+		generate_ground(viewport_size)
+	else:
+		generate_ground(Main.viewport_override)
 
 
 func burnt(pos : Vector2) -> void:
