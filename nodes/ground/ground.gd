@@ -9,6 +9,7 @@ const FireNode := preload("res://nodes/fire/fire.tscn")
 const SmokeNode := preload("res://nodes/smoke/smoke.tscn")
 
 var tile_id := tile_set.find_tile_by_name(tile_name)
+var tile_number := tile_set.tile_get_region(tile_id).size/tile_set.autotile_get_size(tile_id) - Vector2(1,1)
 var burnt_id := tile_set.find_tile_by_name(burnt_grnd)
 var burnt_tiles := tile_set.tile_get_region(burnt_id).size/tile_set.autotile_get_size(burnt_id) - Vector2(1,1)
 var on_fire_tiles := [] #PoolVector2Array()
@@ -18,11 +19,11 @@ func _ready():
 	Main.connect("burnt",self,"burnt")
 	Main.connect("fire_spread",self,"fire_spread")
 	
-	if Main.viewport_override == Vector2.ZERO:
+	if ProjectSettings.get("global/ViewportSize") == Vector2.ZERO:
 		var viewport_size := get_viewport().get_visible_rect().size
 		generate_ground(viewport_size)
 	else:
-		generate_ground(Main.viewport_override)
+		generate_ground(ProjectSettings.get("global/ViewportSize"))
 
 
 func burnt(pos : Vector2) -> void:
@@ -33,9 +34,10 @@ func burnt(pos : Vector2) -> void:
 	set_cell(int(pos.x),int(pos.y),burnt_id,false,false,false,random_tile)
 	on_fire_tiles.erase(world_to_map(pos))
 	
-	#var NewNode = SmokeNode.instance() # Spawn Smoke
-	#get_parent().add_child(NewNode)
-	#NewNode.position = to_global(pos)
+	if Main.rng.randi_range(0,1):
+		var NewNode = SmokeNode.instance() # Spawn Smoke
+		get_parent().add_child(NewNode)
+		NewNode.position = to_global(map_to_world(pos))
 
 
 func fire_spread(pos : Vector2) -> void:
@@ -74,8 +76,6 @@ func generate_ground(var viewport_rect : Vector2 = Vector2.ZERO) -> void:
 	var map_start := world_to_map(start)
 	var map_end := world_to_map(start + viewport_rect) + Vector2(1,1)
 	
-	var tile_number := tile_set.tile_get_region(tile_id).size/tile_set.autotile_get_size(tile_id) - Vector2(1,1)
-	
 	for x in range(map_start.x,map_end.x):
 		for y in range(map_start.y,map_end.y):
 			var random_tile : Vector2 = Vector2(Main.rng.randi_range(0,int(tile_number.x)),Main.rng.randi_range(0,int(tile_number.y)))
@@ -87,3 +87,12 @@ func _on_StartTimer_timeout():
 	var NewNode = FireNode.instance()
 	get_parent().add_child(NewNode)
 	NewNode.position = to_global(map_to_world(get_used_cells()[Main.rng.randi_range(0,get_used_cells().size()-1)]))
+
+
+func _on_RespawnTimer_timeout():
+	$RespawnTimer.wait_time = Main.rng.randf_range(0.01,0.1)
+	var cell : Vector2 = get_used_cells()[Main.rng.randi_range(0,get_used_cells().size()-1)]
+	
+	if get_cellv(cell) == burnt_id:
+		var random_tile : Vector2 = Vector2(Main.rng.randi_range(0,int(tile_number.x)),Main.rng.randi_range(0,int(tile_number.y)))
+		set_cell(int(cell.x),int(cell.y),tile_id,false,false,false,random_tile)

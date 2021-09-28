@@ -4,15 +4,18 @@ extends TileMap
 export(String) var tile_name := "Props" # Atlas Tile name used for generation
 export(float) var clear_chance := 0.25 # The percentage of empty tiles
 
+var tile_id := tile_set.find_tile_by_name(tile_name)
+var tile_number := tile_set.tile_get_region(tile_id).size/tile_set.autotile_get_size(tile_id) - Vector2(1,1)
+
 
 func _ready():
 	Main.connect("burnt",self,"burnt")
 	
-	if Main.viewport_override == Vector2.ZERO:
+	if ProjectSettings.get("global/ViewportSize") == Vector2.ZERO:
 		var viewport_size := get_viewport().get_visible_rect().size
 		generate_ground(viewport_size)
 	else:
-		generate_ground(Main.viewport_override)
+		generate_ground(ProjectSettings.get("global/ViewportSize"))
 
 
 func burnt(pos : Vector2) -> void:
@@ -25,9 +28,6 @@ func generate_ground(var viewport_rect : Vector2 = Vector2.ZERO) -> void:
 	
 	var map_start := world_to_map(start)
 	var map_end := world_to_map(start + viewport_rect) + Vector2(1,1)
-	
-	var tile_id : int = tile_set.find_tile_by_name(tile_name)
-	var tile_number := tile_set.tile_get_region(tile_id).size/tile_set.autotile_get_size(tile_id) - Vector2(1,1)
 	
 	for x in range(map_start.x,map_end.x):
 		for y in range(map_start.y,map_end.y):

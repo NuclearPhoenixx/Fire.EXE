@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://tilemap/ground_tilemap.tres" type="TileSet" id=1]
 [ext_resource path="res://tilemap/props_tilemap.tres" type="TileSet" id=2]
@@ -6,38 +6,95 @@
 [ext_resource path="res://nodes/props/props.gd" type="Script" id=4]
 [ext_resource path="res://nodes/screeneffects/screeneffects.gd" type="Script" id=5]
 
-[sub_resource type="ParticlesMaterial" id=1]
-lifetime_randomness = 0.5
-emission_shape = 2
-emission_box_extents = Vector3( 550, 1, 1 )
-flag_disable_z = true
-gravity = Vector3( 0, 150, 0 )
-orbit_velocity = 0.0
-orbit_velocity_random = 0.0
-scale = 2.0
-color = Color( 0.407843, 0.537255, 1, 1 )
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0.0980392, 0.0980392, 0.0980392, 1 )
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color( 0.505882, 0, 0, 1 )
+expand_margin_left = 5.0
+expand_margin_right = 5.0
+expand_margin_top = 5.0
+expand_margin_bottom = 5.0
+
+[sub_resource type="GDScript" id=2]
+script/source = "extends Label
+
+
+func _ready():
+	Main.connect(\"fire_spread\",self,\"destroy\")
+
+
+func destroy(_position : Vector2) -> void:
+	queue_free()
+"
+
+[sub_resource type="StyleBoxFlat" id=4]
+bg_color = Color( 0.192157, 0.192157, 0.192157, 1 )
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color( 0.94902, 0.470588, 0, 1 )
+expand_margin_left = 5.0
+expand_margin_right = 5.0
+expand_margin_top = 5.0
+expand_margin_bottom = 5.0
+
+[sub_resource type="GDScript" id=3]
+script/source = "extends Label
+
+
+export(String) var msg := \"í ½í¸„í ½í¸„í ½í¸„í ½í¸„Tiles burnt: \"
+
+var count : int = 0
+
+
+func _ready():
+	Main.connect(\"burnt\",self,\"new_tile\")
+
+
+func new_tile(_position : Vector2) -> void:
+	count += 1
+	text = msg + String(count)
+"
 
 [node name="Main2D" type="Node2D"]
 
 [node name="Overlay" type="CanvasLayer" parent="."]
 
-[node name="Label" type="Label" parent="Overlay"]
+[node name="ClickToStart" type="Label" parent="Overlay"]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -64.5
-margin_top = -7.0
-margin_right = 64.5
-margin_bottom = 7.0
-custom_colors/font_color = Color( 0, 0, 0, 1 )
-custom_colors/font_color_shadow = Color( 1, 1, 1, 1 )
-custom_constants/shadow_as_outline = 1
-text = "work in progress"
+margin_left = -77.0
+margin_top = -12.0
+margin_right = 77.0
+margin_bottom = 12.0
+custom_styles/normal = SubResource( 1 )
+text = "click to start a fire"
 uppercase = true
+script = SubResource( 2 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="BurntTilesCounter" type="Label" parent="Overlay"]
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -58.0
+margin_right = 58.0
+margin_bottom = 22.0
+custom_styles/normal = SubResource( 4 )
+text = "Tiles burnt: 0000"
+align = 1
+script = SubResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+msg = "Tiles burnt: "
 
 [node name="Ground" type="TileMap" parent="."]
 tile_set = ExtResource( 1 )
@@ -47,6 +104,8 @@ script = ExtResource( 3 )
 __meta__ = {
 "_edit_lock_": true
 }
+
+[node name="RespawnTimer" type="Timer" parent="Ground"]
 
 [node name="Props" type="TileMap" parent="."]
 tile_set = ExtResource( 2 )
@@ -70,16 +129,6 @@ __meta__ = {
 
 [node name="StartTimer" type="Timer" parent="."]
 one_shot = true
-autostart = true
 
-[node name="FloodTimer" type="Timer" parent="."]
-one_shot = true
-
-[node name="Rain" type="Particles2D" parent="."]
-position = Vector2( 512, 0 )
-emitting = false
-amount = 256
-lifetime = 4.0
-process_material = SubResource( 1 )
-
+[connection signal="timeout" from="Ground/RespawnTimer" to="Ground" method="_on_RespawnTimer_timeout"]
 [connection signal="timeout" from="StartTimer" to="Ground" method="_on_StartTimer_timeout"]

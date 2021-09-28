@@ -10,7 +10,7 @@ config_version=4
 
 [application]
 
-config/name="We Are Fine"
+config/name="Fire.EXE"
 run/main_scene="res://main.tscn"
 config/icon="res://icon.png"
 
@@ -20,17 +20,28 @@ Main="*res://nodes/autoload/main.gd"
 
 [debug]
 
-settings/fps/force_fps=30
 gdscript/warnings/return_value_discarded=false
 
 [display]
 
 window/dpi/allow_hidpi=true
-window/vsync/use_vsync=false
+
+[global]
+
+ViewportSize=Vector2( 0, 0 )
+ViewportSize.HTML5=Vector2( 1000, 600 )
+
+[input]
+
+ui_accept={
+"deadzone": 0.5,
+"events": [ Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":0,"button_index":0,"pressure":0.0,"pressed":false,"script":null)
+, Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"button_mask":0,"position":Vector2( 0, 0 ),"global_position":Vector2( 0, 0 ),"factor":1.0,"button_index":1,"pressed":false,"doubleclick":false,"script":null)
+ ]
+}
 
 [physics]
 
-common/physics_fps=30
 common/enable_pause_aware_picking=true
 
 [rendering]

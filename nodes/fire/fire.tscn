@@ -31,7 +31,7 @@ hue_variation_random = 0.28
 [node name="Fire" type="Particles2D" groups=[
 "fire",
 ]]
-amount = 64
+amount = 56
 lifetime = 1.5
 randomness = 1.0
 process_material = SubResource( 5 )
