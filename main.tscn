@@ -46,7 +46,7 @@ expand_margin_bottom = 5.0
 script/source = "extends Label
 
 
-export(String) var msg := \"í ½í¸„í ½í¸„í ½í¸„í ½í¸„Tiles burnt: \"
+export(String) var msg := \"ðŸ˜„ðŸ˜„ðŸ˜„ðŸ˜„Tiles burnt: \"
 
 var count : int = 0
 
